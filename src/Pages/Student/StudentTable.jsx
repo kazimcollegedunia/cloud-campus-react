@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useState } from "react";
 import { useEffect } from "react";
+import Api from "../../services/api"
 
 const table = () => {
 
@@ -10,11 +11,11 @@ const table = () => {
         const [schoolSection,setSchoolSection] = useState([]);
         const [filterData, setFilterData] = useState("");
         const [studentCount, setStudentCount] = useState(0);
-    let filterString = "";
-        useEffect(() => {
-        getStudentData(); 
-        getClass();
-        getSection();
+        let filterString = "";
+            useEffect(() => {
+            getStudentData(); 
+            getClass();
+            getSection();
         }, []);
 
         const getStudentData = async (filter = {}) => {
@@ -43,7 +44,7 @@ const table = () => {
                 `http://cloud-campus-apis.test/api/v1/student/?${filterString}`
             );
 
-            // console.log(studentDetails.data.data.studentCount); return 1;
+            console.log("tbale student data",studentDetails.data.data); return 1;
             setStudentCount(studentDetails.data.data.studentCount);
 
 

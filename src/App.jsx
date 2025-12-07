@@ -1,16 +1,9 @@
-import Student from "./components/Student/StudentMain";
-import axios from "axios";
+import MainPage from "./Pages/MainPage/Mainpage";
 
-const app = () => {
-  // const getStudentData = async () => {
-  // let studentDetails = await axios.get('http://cloud-campus-apis.test/api/v1/student');
-  
-  //   console.log(studentDetails.data.data);
-  // }
-  return <>
-    {/* <button onClick={ getStudentData }>Get Student</button> */}
-  <Student />
-  <h1 className="text-white">Ya Allah. Ya Ali a.s Madad</h1></>
-}
+const App = () => {
+  return <> 
+    <MainPage />
+  </>
+};
 
-export default app;
+export default App;
