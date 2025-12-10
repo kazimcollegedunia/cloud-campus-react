@@ -9,7 +9,7 @@ import Dashboard from "../Dashboard/MainDashboard";
 import { Routes,Route } from "react-router-dom";
 import Student from "../Student/StudentMain";
 import Fee from "../Fee/Fee";
-import Attendance from "../Attendance/Attendance";
+import Attendance from "../Attendance/AttendancePage";
 // import Student from "../Student/StudentMain";
 
 const App = () => {

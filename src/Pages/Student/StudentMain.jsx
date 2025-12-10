@@ -1,5 +1,6 @@
 import StudentTable from "./StudentTable"
 import StudentFrom from "./StudentFrom"
+import { CLASS_LIST,SECTION_LIST } from "../../constants/SchoolData";
 
 const student = () => {    
     return <>   
@@ -7,7 +8,7 @@ const student = () => {
             {/* <!-- TOP: ADD STUDENT FORM --> */}
             <StudentFrom/>
             {/* <!-- FILTERS + TABLE --> */}
-            <StudentTable />
+            <StudentTable  classes={CLASS_LIST}/>
         </section>
     </>
 }
