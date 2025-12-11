@@ -1,7 +1,9 @@
 import { useState, useEffect } from "react";
 import Api from "../../services/api";
+import { useNavigate } from "react-router-dom";
 
 const StudentTable = (props) => {
+  const navigator = useNavigate();
   const [students, setStudents] = useState([]);
   const [schoolClass, setSchoolClass] = useState([]);
   const [schoolSection, setSchoolSection] = useState([]);
@@ -17,12 +19,10 @@ const StudentTable = (props) => {
         setFilters(finalFilters);
 
         const response = await Api.get("/student-lists", { params: finalFilters });
-        console.log("Best Option",);
-        // setStudentCount(response.data.data.studentCount);
         setStudents(response.data.data.studentData);
         console.log("Students fetched:", response.data.data.studentData);
     } catch (err) {
-        console.log(err.response.data);
+      console.log("Error:", err);
     }
 };
 
@@ -31,21 +31,21 @@ const StudentTable = (props) => {
   // Fetch Class & Section Lists
   // -------------------------------------
   const getClass = async () => {
-    try {
-      const res = await Api.get("/all-class");
-      setSchoolClass(res.data.data);
-    } catch (err) {
-      console.log("Error fetching class:", err);
-    }
+    // try {
+    //   const res = await Api.get("/all-class");
+    //   setSchoolClass(res.data.data);
+    // } catch (err) {
+    //   console.log("Error fetching class:", err);
+    // }
   };
 
   const getSection = async () => {
-    try {
-      const res = await Api.get("/all-section");
-      setSchoolSection(res.data.data);
-    } catch (err) {
-      console.log("Error fetching section:", err);
-    }
+    // try {
+    //   const res = await Api.get("/all-section");
+    //   setSchoolSection(res.data.data);
+    // } catch (err) {
+    //   console.log("Error fetching section:", err);
+    // }
   };
 
   // -------------------------------------

@@ -1,7 +1,13 @@
 import Api from "../services/api";
 import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 
 const Signup = () => {
+  const navigate = useNavigate();
+  
+  // -------------------------
+  // Form Data State
+  // -------------------------
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -37,6 +43,7 @@ const Signup = () => {
       const res = await Api.post("/auth/register", formData);
 
       setSuccess("Account created successfully!");
+      navigate("/signin");
       console.log("Signup Success:", res.data);
     } catch (err) {
         
@@ -146,7 +153,8 @@ const Signup = () => {
 
           <p className="mt-5 text-[11px] text-center text-slate-400">
             Already have an account?
-            <a href="login.html" className="text-blue-400 font-semibold hover:underline"> Login</a>
+            {/* <a href="/signin" className="text-blue-400 font-semibold hover:underline"> Login</a> */}
+            <Link  to="/signin" className="text-blue-400 font-semibold hover:underline"> Login</Link>
           </p>
 
         </div>

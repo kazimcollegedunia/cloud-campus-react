@@ -8,7 +8,9 @@ export const CLASS_LIST = [
   "7",
   "8",
   "9",
-  "10"
+  "10",
+  "11",
+  "12"
 ];
 
 export const SECTION_LIST = [

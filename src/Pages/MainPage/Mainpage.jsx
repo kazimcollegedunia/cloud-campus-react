@@ -1,37 +1,78 @@
+import { Routes, Route } from "react-router-dom";
 
-import axios from "axios";
-// import Signup from "./Signup/Signup";
-// import Signin from "./Signup/Signin";
-// import Normal from "./Signup/Normal";
-import Sidebar from "../Sidebar/Sidebar";
-import Header from "../Header/TopHeader";
+import DashboardLayout from "../../layout/DashboardLayout";
+import AuthLayout from "../../layout/AuthLayout";
+
 import Dashboard from "../Dashboard/MainDashboard";
-import { Routes,Route } from "react-router-dom";
 import Student from "../Student/StudentMain";
-import Fee from "../Fee/Fee";
 import Attendance from "../Attendance/AttendancePage";
-// import Student from "../Student/StudentMain";
+import Fee from "../Fee/Fee";
+
+import Signup from "../../Signup/Signup";
+import Signin from "../../Signup/Signin";
 
 const App = () => {
-  return <>
-    <div className="flex min-h-screen">
-      <Sidebar />
+  return (
+    <Routes>
+      {/* AUTH PAGES – NO SIDEBAR/HEADER */}
+      <Route 
+        path="/signin" 
+        element={
+          <AuthLayout>
+            <Signin />
+          </AuthLayout>
+        }
+      />
 
-      <main className="flex-1 flex flex-col">
-        {/* <section className="p-6 space-y-6"> */}
-        <Header />
-        <Routes>
-          <Route path="/" element={<Dashboard />} />
-          <Route path="/student" element={<Student />} />
-          <Route path="/attendance" element={<Attendance />} />
-          <Route path="/fee" element={<Fee />} />
-        </Routes>
-        {/* </section> */}
-      </main>
-    </div>
+      <Route 
+        path="/signup" 
+        element={
+          <AuthLayout>
+            <Signup />
+          </AuthLayout>
+        }
+      />
 
-    
-    
-  </>
-}
+
+      {/* DASHBOARD PAGES – WITH SIDEBAR + HEADER */}
+      <Route 
+        path="/" 
+        element={
+          <DashboardLayout>
+            <Dashboard />
+          </DashboardLayout>
+        } 
+      />
+
+      <Route 
+        path="/student" 
+        element={
+          <DashboardLayout>
+            <Student />
+          </DashboardLayout>
+        } 
+      />
+
+      <Route 
+        path="/attendance" 
+        element={
+          <DashboardLayout>
+            <Attendance />
+          </DashboardLayout>
+        } 
+      />
+
+      <Route 
+        path="/fee" 
+        element={
+          <DashboardLayout>
+            <Fee />
+          </DashboardLayout>
+        } 
+      />
+
+    </Routes>
+  );
+};
+
 export default App;

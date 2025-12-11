@@ -1,14 +1,16 @@
 import { useState } from "react";
 import Api from "../services/api";
-import { useNavigate } from "react-router-dom";
+import {Link, useNavigate } from "react-router-dom";
+import { setAccessToken } from "../auth/token";
 
 
-const Signup =() =>{
+const Signin =() =>{
     const navigate = useNavigate();
     const [formData,setFormData] = useState({
         email:"",
         password:""
     });
+    const [error,setError] = useState("");
 
     const formHandler = (e) => {
         console.log(e.target.name);
@@ -20,22 +22,25 @@ const Signup =() =>{
 
     const formSubmitHandler = async (e) => {
         e.preventDefault();
-        // console.log(e.target);
-        
          try {
             const res = await Api.post("/auth/login", formData);
+            // console.log(res.data); return;
+            const token = await res.data.token;
+            console.log("Received token:", token);
+            // SAVE TOKEN IN MEMORY
+            setAccessToken(token);
             navigate("/");
-            // setSuccess("Account created successfully!");
             console.log("Signup Success:", res.data);
-            // console.log();
-            } catch (err) {
-                
-            // console.log("Signup Error:", err.response.data.errors.email);
-            //   console.log("Signup Error:", err);
+        } catch (err) {
+            const message =  err?.response?.data?.message || err?.message ||
+            "Something went wrong";
+
+            setError(message);
+            console.log("Signup Error:", message);
             // setError(err.response.errors?.data.errors?.message || "Something went wrong");
-            } finally {
-                // setLoading(false);
-            }
+        } finally {
+            // setLoading(false);
+        }
     }
 
     return <>
@@ -56,6 +61,7 @@ const Signup =() =>{
                 Login as <span className="font-semibold text-blue-400">Admin</span>, Teacher, Student or Parent
                 </p>
 
+                <p className="text-xs text-rose-500 text-center">{error}</p>
                 <form className="space-y-4" onSubmit={(e) => {formSubmitHandler(e)}}>
                 <div>
                     <label className="block text-xs font-medium mb-1">Email</label>
@@ -84,7 +90,7 @@ const Signup =() =>{
                     />
                 </div>
 
-                <div>
+                {/* <div>
                     <label className="block text-xs font-medium mb-1">Login As</label>
                     <select
                     className="w-full px-3 py-2 rounded-lg bg-slate-800 border border-slate-700 text-sm outline-none focus:ring-2 focus:ring-blue-500"
@@ -94,18 +100,19 @@ const Signup =() =>{
                     <option>Student</option>
                     <option>Parent</option>
                     </select>
-                </div>
+                </div> */}
 
                 <button
-                    className="w-full mt-2 py-2.5 rounded-lg bg-blue-500 hover:bg-blue-600 text-sm font-semibold transition flex items-center justify-center gap-2"
+                    className="w-full mt-2 py-2.5 rounded-lg bg-blue-500 hover:bg-blue-600 text-sm font-semibold transition flex items-center justify-center gap-2 active:shadow-sm transition duration-150 ease-in-out"
                 >
                     Login to Dashboard
                 </button>
                 </form>
 
                 <p className="mt-5 text-[11px] text-center text-slate-400">
-                New school?
-                <a href="signup.html" className="text-blue-400 font-semibold hover:underline">Create an account</a>
+                New user?
+                {/* <a href="/signup" className="text-blue-400 font-semibold hover:underline">Create an account</a> */}
+                <Link  to="/signup" className="text-blue-400 font-semibold hover:underline">Create an account</Link>
                 </p>
             </div>
         </div>
@@ -113,4 +120,4 @@ const Signup =() =>{
     
 }
 
-export default Signup;
+export default Signin;

@@ -18,7 +18,7 @@ const SideBar = () => {
                 <Link to="/library" className="block py-2.5 px-4 rounded-md hover:bg-white/10 text-gray-300">📚 Library</a> */}
             </nav>
 
-            <Link  to="/singin" className="m-4 py-2 bg-red-500 hover:bg-red-600 rounded-md font-medium text-sm">Logout</Link>
+            <Link  to="/signin" className="m-4 py-2 bg-red-500 hover:bg-red-600 rounded-md font-medium text-sm text-center">Logout ⏻</Link>
         </aside>
     </>
 }
