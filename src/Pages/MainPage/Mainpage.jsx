@@ -3,7 +3,7 @@ import { Routes, Route } from "react-router-dom";
 import DashboardLayout from "../../layout/DashboardLayout";
 import AuthLayout from "../../layout/AuthLayout";
 
-import Dashboard from "../Dashboard/MainDashboard";
+import Dashboard from "../Dashboard/Dashboard";
 import Student from "../Student/StudentMain";
 import Attendance from "../Attendance/AttendancePage";
 import Fee from "../Fee/Fee";

@@ -18,7 +18,6 @@ const Student = () => {
 
   const [formErrors, setFormErrors] = useState({});
   const [loading, setLoading] = useState(false);
-  const [students, setStudents] = useState([]);
 
   // Handle Input Changes
   const handleChange = (e) => {
@@ -51,9 +50,6 @@ const Student = () => {
         dob: "",
       });
 
-      // Refresh list
-      fetchStudents();
-
       setFormErrors({});
     } catch (err) {
       setFormErrors(err.response?.data?.errors || {});
@@ -62,20 +58,6 @@ const Student = () => {
       setLoading(false);
     }
   };
-
-  // Get all students (loading once)
-  const fetchStudents = async () => {
-    try {
-      const res = await Api.get("/all-student");
-      setStudents(res.data.data);
-    } catch (err) {
-      console.log("Error fetching students:", err);
-    }
-  };
-
-  useEffect(() => {
-    fetchStudents();
-  }, []);
 
   return (
     <>

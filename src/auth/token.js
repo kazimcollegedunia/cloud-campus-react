@@ -1,13 +1,20 @@
-let accessToken = null;
+// auth/token.js
+
+// Access token key for localStorage
+const TOKEN_KEY = "access_token";
 
 export function setAccessToken(token) {
-  accessToken = token;
+  if (token) {
+    localStorage.setItem(TOKEN_KEY, token);
+  } else {
+    localStorage.removeItem(TOKEN_KEY);
+  }
 }
 
 export function getAccessToken() {
-  return accessToken;
+  return localStorage.getItem(TOKEN_KEY); 
 }
 
 export function clearAccessToken() {
-  accessToken = null;
+  localStorage.removeItem(TOKEN_KEY);
 }

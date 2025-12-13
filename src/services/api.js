@@ -1,15 +1,15 @@
 import axios from "axios";
-import { getAccessToken } from "./../auth/token";
+import { getAccessToken, clearAccessToken } from "./../auth/token";
 
 const api = axios.create({
-  baseURL: "http://cloud-campus-apis.test/api/v1", 
+  baseURL: "http://cloud-campus-apis.test/api/v1",
   headers: {
     "Content-Type": "application/json",
     Accept: "application/json",
   },
 });
 
-// Interceptor → token automatically add hoga
+// REQUEST INTERCEPTOR → Token Auto Attach
 api.interceptors.request.use((config) => {
   const token = getAccessToken();
 
@@ -20,16 +20,16 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
-
-// RESPONSE INTERCEPTOR → 401 redirect
+// RESPONSE INTERCEPTOR → Handle Expired Token
 api.interceptors.response.use(
-  (response) => response, // success
+  (response) => response,
   (error) => {
     if (error.response?.status === 401) {
 
-      // Token expired OR invalid
-      localStorage.removeItem("access_token");
-      window.location.href = "/signin";  // Auto redirect
+      // Token expired / invalid
+      clearAccessToken();
+      // optional → but you disabled it so I leave it commented
+      window.location.href = "/signin";
     }
 
     return Promise.reject(error);

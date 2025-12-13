@@ -25,12 +25,13 @@ const Signin =() =>{
          try {
             const res = await Api.post("/auth/login", formData);
             // console.log(res.data); return;
-            const token = await res.data.token;
-            console.log("Received token:", token);
+            const token = await res.data.data.token;
+            
+            // console.log("Received token:", token);
             // SAVE TOKEN IN MEMORY
             setAccessToken(token);
             navigate("/");
-            console.log("Signup Success:", res.data);
+            // console.log("Signup Success:", res.data);
         } catch (err) {
             const message =  err?.response?.data?.message || err?.message ||
             "Something went wrong";
