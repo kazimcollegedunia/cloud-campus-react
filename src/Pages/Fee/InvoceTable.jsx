@@ -1,5 +1,20 @@
 const InvoiceTable = (props) => {
     const tableData = props.data;
+    const getStatusClass = (status) => {
+      switch (status) {
+        case 'Pending':
+          return 'bg-amber-100 text-amber-700';
+        case 'Overdue':
+          return 'bg-rose-100 text-rose-700';
+        case 'Paid':
+          return 'bg-green-100 text-green-700';
+        case 'paid':
+          return 'bg-green-100 text-green-700';
+        default:
+          return 'bg-gray-100 text-gray-700';
+      }
+    };
+    // console.log(tableData);
     return <>
         <div className="bg-white rounded-2xl shadow-md p-5">
         <div className="flex items-center justify-between mb-4">
@@ -21,7 +36,7 @@ const InvoiceTable = (props) => {
                 <th className="border-b py-3 px-3">Amount</th>
                 <th className="border-b py-3 px-3">Due Date</th>
                 <th className="border-b py-3 px-3">Status</th>
-                <th className="border-b py-3 px-3 text-right">Actions</th>
+                <th className="border-b py-3 px-3 text-center">Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -50,24 +65,23 @@ const InvoiceTable = (props) => {
               {tableData.length > 0 ? (
                 tableData.map((list, index) => (
                   <tr key={list.user_id} className="hover:bg-gray-50">
-                    <td className="border-b py-2.5 px-3 font-mono text-xs">{list.receipt_no??'N/A'} {list.user_id}</td>
-                    <td className="border-b py-2.5 px-3 font-medium">{list.user.name}</td>
+                    <td className="border-b py-2.5 px-3 font-mono text-xs">{list.receipt_no??'N/A'} </td>
+                    <td className="border-b py-2.5 px-3 font-medium">{list.student_name}</td>
                     <td className="border-b py-2.5 px-3">{list.class_id} {list.section}</td>
-                    <td className="border-b py-2.5 px-3">April 2025</td>
-                    <td className="border-b py-2.5 px-3 font-semibold">₹ 66,500</td>
-                    <td className="border-b py-2.5 px-3">05 Apr 2025</td>
+                    <td className="border-b py-2.5 px-3">{list.due_date}</td>
+                    <td className="border-b py-2.5 px-3 font-semibold">₹ {list.fee_type_amount??'NA'}</td>
+                    <td className="border-b py-2.5 px-3">1st - {list.due_date}</td>
                     <td className="border-b py-2.5 px-3">
-                      
-                      <span className="px-2 py-1 text-xs rounded-full bg-amber-100 text-amber-700">
-                        Pending
+                      <span className={`px-2 py-1 text-xs rounded-full ${getStatusClass(list.status)} text-amber-700`}>
+                        {list.status}
                       </span>
                     </td>
                       <td className="border-b py-2.5 px-3 text-right space-x-2">
-                  <button className="px-3 py-1 text-xs rounded-md bg-gray-100 hover:bg-gray-200">
-                    Reminder
+                  <button className="px-3 py-1 text-xs rounded-md bg-gray-100 hover:bg-gray-200" value={list.action[0]}>
+                    {list.action[0]}
                   </button>
                   <button className="px-3 py-1 text-xs rounded-md bg-emerald-100 text-emerald-700 hover:bg-emerald-200">
-                    Mark Paid
+                    {list.action[1]}
                   </button>
                 </td>
                   </tr>

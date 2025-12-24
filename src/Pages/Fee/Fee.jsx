@@ -2,42 +2,67 @@ import InvoiceTable from './InvoceTable';
 import InvoceFilter from './InvoceFilter';
 import InvoiceSummary from './InvoiceSummary';
 import Api from '../../services/api';
-import { useState,useEffect } from 'react';
+import { useState, useEffect } from 'react';
 
 const Fee = () => {
 
-  const filterHandler = (e) => {
-    e.preventDefault()
-    alert(2345);
-  }
+  const [filters, setFilters] = useState({});
+  const [feeTypes, setFeeTypes] = useState({});
+  const [invoiceTableData, setInvoiceTableData] = useState([]);
 
-  const [invoceTableDatas,setInvoceTableDatas] = useState({}); 
-  const invoceTableData = async () => {
-    try{
-      const  invoceTableData = await Api.get('fee/invoices-list');
-      setInvoceTableDatas(invoceTableData.data.data); 
-    }catch(err){
-        console.log("invoice List : ",err)
+  // API CALL WITH FILTERS
+  const fetchInvoices = async (extraFilters = {}) => {
+    try {
+      const finalFilters = { ...filters, ...extraFilters };
+      setFilters(finalFilters);
+
+      const response = await Api.get("fee/invoices-list", {
+        params: finalFilters,
+      });
+
+      setInvoiceTableData(response.data.data);
+
+    } catch (err) {
+      console.log("Invoice List Error: ", err);
     }
-  }
-  useEffect(() => {
-  invoceTableData()
-  },[]);
+  };
 
-    return <>
+  // FIRST TIME LOAD
+  useEffect(() => {
+    // fetchInvoices();
+    fetchFeeType()
+  }, []);
+
+  // fee/types apis
+
+  const fetchFeeType = async (extraFilters = {}) => {
+    try {
+      const finalFilters = { ...filters, ...extraFilters };
+      setFilters(finalFilters);
+
+      const response = await Api.get("fee/types", {
+        params: finalFilters,
+      });
+
+      setFeeTypes(response.data.data);
+
+    } catch (err) {
+      console.log("Invoice List Error: ", err);
+    }
+  };
+
+  return (
     <section className="p-6 space-y-6">
 
-      {/* <!-- STATS ROW --> */}
       <InvoiceSummary />
 
-      {/* <!-- FILTERS + NEW INVOICE --> */}
-     <InvoceFilter />
+      {/* Pass handler to filter */}
+      <InvoceFilter onApply={(f) => fetchInvoices(f)} feeTypes={feeTypes} />
 
-      {/* <!-- INVOICES TABLE --> */}
-      <InvoiceTable data={invoceTableDatas} />
+      <InvoiceTable data={invoiceTableData} />
 
     </section>
-        </>
-}
+  );
+};
 
 export default Fee;
