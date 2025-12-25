@@ -10,6 +10,7 @@ import Fee from "../Fee/Fee";
 
 import Signup from "../../Signup/Signup";
 import Signin from "../../Signup/Signin";
+import TestingPage from "../TestingPage/Main";
 
 const App = () => {
   return (
@@ -67,6 +68,15 @@ const App = () => {
         element={
           <DashboardLayout>
             <Fee />
+          </DashboardLayout>
+        } 
+      />
+
+       <Route 
+        path="/testing" 
+        element={
+          <DashboardLayout>
+            <TestingPage />
           </DashboardLayout>
         } 
       />

@@ -12,6 +12,7 @@ const SideBar = () => {
                 <Link to="/student" className="block py-2.5 px-4 rounded-md hover:bg-white/10" >🧑‍🎓 Students</Link>
                 <Link to="/attendance" className="block py-2.5 px-4 rounded-md hover:bg-white/10 text-gray-300">📅 Attendance</Link>
                 <Link to="/fee" className="block py-2.5 px-4 rounded-md hover:bg-white/10 text-gray-300">💰 Fees</Link>
+                <Link to="/testing" className="block py-2.5 px-4 rounded-md hover:bg-white/10 text-gray-300">💰 Testing</Link>
                 {/* <Link to="/teacher" className="block py-2.5 px-4 rounded-md hover:bg-white/10 text-gray-300">🧑‍🏫 Teachers</a>
                 <Link to="/attendance" className="block py-2.5 px-4 rounded-md hover:bg-white/10 text-gray-300">📅 Attendance</a>
                 <Link to="/fee" className="block py-2.5 px-4 rounded-md hover:bg-white/10 text-gray-300">💰 Fees</a>
