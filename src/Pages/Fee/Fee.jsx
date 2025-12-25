@@ -7,7 +7,7 @@ import { useState, useEffect } from 'react';
 const Fee = () => {
 
   const [filters, setFilters] = useState({});
-  const [feeTypes, setFeeTypes] = useState({});
+  const [feeTypes, setFeeTypes] = useState([]);
   const [invoiceTableData, setInvoiceTableData] = useState([]);
 
   // API CALL WITH FILTERS
@@ -35,19 +35,34 @@ const Fee = () => {
 
   // fee/types apis
 
-  const fetchFeeType = async (extraFilters = {}) => {
+  // const fetchFeeType = async (extraFilters = {}) => {
+  //   try {
+  //     const finalFilters = { ...filters, ...extraFilters };
+  //     setFilters(finalFilters);
+
+  //     const response = await Api.get("fee/types", {
+  //       params: finalFilters,
+  //     });
+
+  //     setFeeTypes(response.data.data);
+
+  //   } catch (err) {
+  //     console.log("Invoice List Error: ", err);
+  //   }
+  // };
+
+  const fetchFeeType = async (classId) => {
     try {
-      const finalFilters = { ...filters, ...extraFilters };
-      setFilters(finalFilters);
+      if (!classId) return;
 
       const response = await Api.get("fee/types", {
-        params: finalFilters,
+        params: { class_id: classId },
       });
 
       setFeeTypes(response.data.data);
 
     } catch (err) {
-      console.log("Invoice List Error: ", err);
+      console.log("Fee Type Error:", err);
     }
   };
 
@@ -57,9 +72,12 @@ const Fee = () => {
       <InvoiceSummary />
 
       {/* Pass handler to filter */}
-      <InvoceFilter onApply={(f) => fetchInvoices(f)} feeTypes={feeTypes} />
-
-      <InvoiceTable data={invoiceTableData} />
+      <InvoceFilter
+        onApply={(f) => fetchInvoices(f)}
+        onClassChange={(classId) => fetchFeeType(classId)}
+        feeTypes={feeTypes}
+      />
+      <InvoiceTable data={invoiceTableData} feeTypes={feeTypes}/>
 
     </section>
   );

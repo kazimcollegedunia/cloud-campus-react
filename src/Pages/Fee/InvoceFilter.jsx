@@ -1,18 +1,33 @@
 import {useState} from 'react';
 import { CLASS_LIST, SECTION_LIST } from "../../constants/SchoolData";
-const InvoceFilter = ({ onApply,feeTypes }) => {
+const InvoceFilter = ({ onApply, feeTypes, onClassChange }) => {
 
   const [filters, setFilters] = useState({
     class_id: "",
     section: "",
     status: "",
     month: "",
+    feeType: "",
   });
 
+  const handleClassChange = (e) => {
+    const classId = e.target.value;
+
+    // 1️⃣ update local filter state
+    setFilters({
+      ...filters,
+      class_id: classId,
+      feeType: "", // reset fee type
+    });
+
+    // 2️⃣ notify parent → API call
+    onClassChange(classId);
+  };
+
   const changeHandler = (e) => {
-    setFilters({ 
-      ...filters, 
-      [e.target.name]: e.target.value 
+    setFilters({
+      ...filters,
+      [e.target.name]: e.target.value,
     });
   };
 
@@ -38,7 +53,7 @@ const InvoceFilter = ({ onApply,feeTypes }) => {
                         <select
                         className="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-1 focus:ring-blue-500"
                          name="class_id"
-                            onChange={changeHandler}
+                            onChange={handleClassChange}
                         >
                         <option value=" ">All Classes</option>
                         {CLASS_LIST.map((cls,key) => (
@@ -73,10 +88,10 @@ const InvoceFilter = ({ onApply,feeTypes }) => {
                         onChange={changeHandler}
                         className="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-1 focus:ring-blue-500"
                         >
-                        <option>All</option>
-                        <option>Paid</option>
-                        <option>Pending</option>
-                        <option>Overdue</option>
+                        <option value="">All</option>
+                        <option value="paid">Paid</option>
+                        <option value="pending">Pending</option>
+                        <option value="overdue">Overdue</option>
                         </select>
                     </div>
 
@@ -103,20 +118,25 @@ const InvoceFilter = ({ onApply,feeTypes }) => {
 
                     <div>
                         <label className="block font-medium mb-1">Fee Type</label>
-                        <select 
-                        name="feeType"
-                        onChange={changeHandler}
-                        className="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-1 focus:ring-blue-500">
-                            {feeTypes.length > 0 ? (
-                                feeTypes.map((list, index) => (
-                                    <option value={list.id}>{list.name}</option>
-                                ))
-                            ) : (
-                                <option value=" ">Not Assign</option>
-                            )}
-                            
+                        <select
+                            name="feeType"
+                            disabled={!filters.class_id}   // 🔥 key line
+                            onChange={changeHandler}
+                            className="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-1 focus:ring-blue-500 disabled:bg-gray-100"
+                        >
+                            <option value="">
+                            {filters.class_id ? "Select Fee Type" : "Select Class First"}
+                            </option>
+
+                            {feeTypes.length > 0 &&
+                            feeTypes.map((list) => (
+                                <option key={list.id} value={list.id}>
+                                {list.name}
+                                </option>
+                            ))}
                         </select>
                     </div>
+
 
 
                     {/* <div>
