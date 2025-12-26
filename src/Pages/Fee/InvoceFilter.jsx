@@ -1,5 +1,5 @@
 import {useState} from 'react';
-import { CLASS_LIST, SECTION_LIST } from "../../constants/SchoolData";
+import { CLASS_LIST, SECTION_LIST,SECTION_YEAR_MONTHS } from "../../constants/SchoolData";
 const InvoceFilter = ({ onApply, feeTypes, onClassChange }) => {
 
   const [filters, setFilters] = useState({
@@ -97,23 +97,20 @@ const InvoceFilter = ({ onApply, feeTypes, onClassChange }) => {
 
                     <div>
                         <label className="block font-medium mb-1">Month</label>
-                        <select 
-                        name="month"
-                        onChange={changeHandler}
-                        className="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-1 focus:ring-blue-500">
-                            <option value="2025-03">March 2024</option>
-                            <option value="2025-04">April 2024</option>
-                            <option value="2025-05">May 2024</option>
-                            <option value="2025-06">June 2024</option>
-                            <option value="2025-07">July 2024</option>
-                            <option value="2025-08">August 2024</option>
-                            <option value="2025-09">September 2024</option>
-                            <option value="2025-10">October 2024</option>
-                            <option value="2025-11">November 2024</option>
-                            <option value="2025-12">December 2024</option>
-                            <option value="2026-01">January 2025</option>
-                            <option value="2026-02">February 2025</option>
-                        </select>
+                        <select
+                            name="month"
+                            onChange={changeHandler}
+                            className="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                            >
+                            <option value="">Select Month</option>
+
+                            {SECTION_YEAR_MONTHS.map((item) => (
+                                <option key={item.value} value={item.value}>
+                                {item.label}
+                                </option>
+                            ))}
+                            </select>
+
                     </div>
 
                     <div>

@@ -1,4 +1,6 @@
-import {useState} from 'react';
+import {useState,useEffect} from 'react';
+import Api from "../../services/api";
+import { CLASS_LIST, SECTION_LIST,SECTION_YEAR_MONTHS } from "../../constants/SchoolData";
 
 const InvoiceTable = (props) => {
 
@@ -46,6 +48,7 @@ const InvoiceTable = (props) => {
                 <th className="border-b py-3 px-3">Student</th>
                 <th className="border-b py-3 px-3">Class</th>
                 <th className="border-b py-3 px-3">Month</th>
+                <th className="border-b py-3 px-3">Fee Type</th>
                 <th className="border-b py-3 px-3">Amount</th>
                 <th className="border-b py-3 px-3">Due Date</th>
                 <th className="border-b py-3 px-3">Status</th>
@@ -53,35 +56,20 @@ const InvoiceTable = (props) => {
               </tr>
             </thead>
             <tbody>
-
-              {/* <tr className="hover:bg-gray-50">
-                <td className="border-b py-2.5 px-3 font-mono text-xs">INV-2025-001</td>
-                <td className="border-b py-2.5 px-3 font-medium">Aman Sharma</td>
-                <td className="border-b py-2.5 px-3">10 A</td>
-                <td className="border-b py-2.5 px-3">April 2025</td>
-                <td className="border-b py-2.5 px-3 font-semibold">₹ 66,500</td>
-                <td className="border-b py-2.5 px-3">05 Apr 2025</td>
-                <td className="border-b py-2.5 px-3">
-                  <span className="px-2 py-1 text-xs rounded-full bg-green-100 text-green-700">
-                    Paid
-                  </span>
-                </td>
-                <td className="border-b py-2.5 px-3 text-right space-x-2">
-                  <button className="px-3 py-1 text-xs rounded-md bg-gray-100 hover:bg-gray-200">
-                    View
-                  </button>
-                  <button className="px-3 py-1 text-xs rounded-md bg-blue-100 text-blue-700 hover:bg-blue-200">
-                    Receipt
-                  </button>
-                </td>
-              </tr> */}
+              
               {tableData.length > 0 ? (
                 tableData.map((list, index) => (
                   <tr key={list.user_id} className="hover:bg-gray-50">
-                    <td className="border-b py-2.5 px-3 font-mono text-xs">{list.receipt_no??'N/A'} </td>
+                    <td className="border-b py-2.5 px-3 font-mono text-xs">{list.receipt_no?`...${list.receipt_no.slice(-6)}`:'N/A'} </td>
                     <td className="border-b py-2.5 px-3 font-medium">{list.student_name}</td>
                     <td className="border-b py-2.5 px-3">{list.class_id} {list.section}</td>
                     <td className="border-b py-2.5 px-3">{list.due_date}</td>
+                    
+                    <td className="border-b py-2.5 px-3 font-semibold" 
+                      title={list.fee_type_name??"Please Select Fee Type form filters"}>
+                       {list.fee_type_name??'NA'}
+                    </td>
+
                     <td className="border-b py-2.5 px-3 font-semibold">₹ {list.fee_type_amount??'NA'}</td>
                     <td className="border-b py-2.5 px-3">1st - {list.due_date}</td>
                     <td className="border-b py-2.5 px-3">
@@ -93,15 +81,15 @@ const InvoiceTable = (props) => {
                   <button className="px-3 py-1 text-xs rounded-md bg-gray-100 hover:bg-gray-200" value={list.action[0]}>
                     {list.action[0]}
                   </button>
-                  <button
+                  {/* <button
                       onClick={() => handleMarkAsPaid(list)}
                       className="px-3 py-1 text-xs rounded-md bg-emerald-100 text-emerald-700 hover:bg-emerald-200"
                     >
                       Mark as Paids
-                    </button>
-                  {/* <button className="px-3 py-1 text-xs rounded-md bg-emerald-100 text-emerald-700 hover:bg-emerald-200">
+                    </button> */}
+                  <button className="px-3 py-1 text-xs rounded-md bg-emerald-100 text-emerald-700 hover:bg-emerald-200">
                     {list.action[1]}
-                  </button> */}
+                  </button>
                 </td>
                   </tr>
                 ))
@@ -131,20 +119,48 @@ const InvoiceTable = (props) => {
     </>
 }
 
-const MarkPaidModal = ({ isOpen, invoice, onClose ,feeTypes}) => {
-  
-  const [formData , setFormData] = useState();
-   const formHandler = (e) => {
-    e.preventDefault();
-      setFormData({
-          ...formData,
-          [e.target.name]:e.target.name
-        })
+const MarkPaidModal = ({ isOpen, invoice, onClose, feeTypes }) => {
 
-        console.log(formData);
-  }
+  const [formData, setFormData] = useState({
+    student_id: "",
+    fee_type_id: "",
+    paid_amount: "",
+  });
+
+  // when modal opens, prefill student_id & amount
+  useEffect(() => {
+    if (invoice) {
+      setFormData({
+        student_id: invoice.student_id,
+        fee_type_id: "",
+        paid_amount: invoice.fee_type_amount || "",
+      });
+    }
+  }, [invoice]);
+
+  const changeHandler = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const submitHandler = async (e) => {
+    e.preventDefault();
+
+    try {
+      await Api.post("fee", formData);
+
+      // success → close modal
+      onClose();
+
+    } catch (err) {
+      console.log("Mark Paid Error:", err.response?.data);
+    }
+  };
 
   if (!isOpen || !invoice) return null;
+
   return (
     <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
       <div className="bg-white rounded-xl shadow-lg w-full max-w-md p-6">
@@ -152,55 +168,99 @@ const MarkPaidModal = ({ isOpen, invoice, onClose ,feeTypes}) => {
         <h3 className="text-lg font-semibold mb-4">
           Mark Invoice as Paid
         </h3>
-        <form onSubmit={(e) => {
-          formHandler(e)
-        }  }>
-          <input type="hidden" value={invoice.user_id} name="user_id"/>
-          {/* Fee Type */}
+
+        {/* STUDENT INFO */}
+        <h2 className="mb-2 text-lg font-medium">Student Details:</h2>
+        <ul className="space-y-1 text-sm">
+          <li>
+            Student Name:
+            <span className="text-rose-500 ml-1">
+              {invoice.student_name}
+            </span>
+          </li>
+          <li>
+            Class & Section:
+            <span className="text-rose-500 ml-1">
+              {invoice.class_id} ({invoice.section})
+            </span>
+          </li>
+        </ul>
+
+        <form onSubmit={submitHandler} className="mt-4">
+
           <div className="mb-3">
-            <label className="block font-medium mb-1">Fee Type</label>
-                <select
-                    name="feeType"
-                    className="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-1 focus:ring-blue-500 disabled:bg-gray-100"
-                >
-                    {feeTypes.length > 0 &&
-                    feeTypes.map((list) => (
-                        <option key={list.id} value={list.id}>
-                        {list.name}
-                        </option>
-                    ))}
-                </select>
+              <label className="block font-medium mb-1">Month</label>
+              <select
+                  name="month"
+                  onChange={changeHandler}
+                  className="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                  >
+                  <option value="">Select Month</option>
+                  {SECTION_YEAR_MONTHS.map((item) => (
+                      <option key={item.value} value={item.value}>
+                      {item.label}
+                      </option>
+                  ))}
+                  </select>
           </div>
 
-          {/* Paid Amount */}
+          {/* FEE TYPE */}
+          <div className="mb-3">
+            <label className="block font-medium mb-1">Fee Type</label>
+            <select
+              name="fee_type_id"
+              value={formData.fee_type_id}
+              onChange={changeHandler}
+              required
+              className="w-full border rounded-lg px-3 py-2"
+            >
+              <option value="">Select Fee Type</option>
+              {feeTypes.map((list) => (
+                <option key={list.id} value={list.id}>
+                  {list.name}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          {/* PAID AMOUNT */}
           <div className="mb-4">
-            <label className="block text-sm font-medium mb-1">Paid Amount</label>
+            <label className="block font-medium mb-1">Paid Amount</label>
             <input
               type="number"
-              defaultValue={invoice.fee_type_amount}
-              className="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-emerald-500"
+              name="paid_amount"
+              value={formData.paid_amount}
+              onChange={changeHandler}
+              required
+              className="w-full border rounded-lg px-3 py-2"
             />
           </div>
 
-          {/* Actions */}
+          {/* ACTIONS */}
           <div className="flex justify-end gap-2">
             <button
+              type="button"
               onClick={onClose}
               className="px-4 py-2 rounded-lg bg-gray-100 hover:bg-gray-200"
             >
               Cancel
             </button>
             <button
+              type="submit"
               className="px-4 py-2 rounded-lg bg-emerald-600 text-white hover:bg-emerald-700"
             >
               Confirm Paid
             </button>
           </div>
+
         </form>
       </div>
     </div>
   );
 };
+
+
+
 
 
 export default InvoiceTable;
