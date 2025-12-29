@@ -74,7 +74,7 @@ const App = () => {
       />
 
       <Route 
-        path="/teacher-management" 
+        path="/admin/teacher" 
         element={
           <DashboardLayout>
             <Teacher />
@@ -83,7 +83,7 @@ const App = () => {
       />
 
       <Route 
-        path="/fee-management" 
+        path="/admin/fee" 
         element={
           <DashboardLayout>
             <FeeAdmin />

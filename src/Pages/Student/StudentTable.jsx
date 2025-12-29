@@ -20,7 +20,7 @@ const StudentTable = (props) => {
 
         const response = await Api.get("/student-lists", { params: finalFilters });
         setStudents(response.data.data.studentData);
-        console.log("Students fetched:", response.data.data.studentData);
+        // console.log("Students fetched:", response.data.data.studentData);
     } catch (err) {
       console.log("Error:", err);
     }

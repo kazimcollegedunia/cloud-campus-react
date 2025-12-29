@@ -2,9 +2,12 @@ import { useState } from "react";
 import Api from "../services/api";
 import {Link, useNavigate } from "react-router-dom";
 import { setAccessToken } from "../auth/token";
+import { useAuth } from "../context/AuthContext";
+
 
 
 const Signin =() =>{
+    const { setUser } = useAuth();
     const navigate = useNavigate();
     const [formData,setFormData] = useState({
         email:"",
@@ -24,14 +27,13 @@ const Signin =() =>{
         e.preventDefault();
          try {
             const res = await Api.post("/auth/login", formData);
-            // console.log(res.data); return;
-            const token = await res.data.data.token;
-            
-            // console.log("Received token:", token);
-            // SAVE TOKEN IN MEMORY
-            setAccessToken(token);
+            const data = res.data.data;
+
+            setUser(data.user);
+
+            setAccessToken(data.token);
             navigate("/");
-            // console.log("Signup Success:", res.data);
+
         } catch (err) {
             const message =  err?.response?.data?.message || err?.message ||
             "Something went wrong";

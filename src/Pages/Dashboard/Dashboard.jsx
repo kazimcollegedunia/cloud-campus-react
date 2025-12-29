@@ -12,7 +12,7 @@ const Dashboard = () => {
         try {
             const res = await Api.get("/dashboard");
             setDashboardCradData(res.data.data);
-            console.log("Dashboard Stats:", res.data);
+            // console.log("Dashboard Stats:", res.data);
         } catch (err) {
             console.log("Error fetching dashboard stats:", err);
         }
@@ -21,7 +21,7 @@ const Dashboard = () => {
     useEffect(() => {
         dashboardCardApi();
     }, []);
-    console.log("Dashboard Data:", dashboardCradData);
+    // console.log("Dashboard Data:", dashboardCradData);
 
     return <>
         <section className="p-6 space-y-6">
