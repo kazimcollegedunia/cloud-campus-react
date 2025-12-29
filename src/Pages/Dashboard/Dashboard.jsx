@@ -2,6 +2,7 @@ import { useState,useEffect } from "react";
 import Api from "../../services/api";
 import { useNavigate } from "react-router-dom";
 import DashboardTopCard from "./DashboardTopCard";
+import { Link } from "react-router-dom";
 
 const Dashboard = () => {
 
@@ -42,9 +43,12 @@ const Dashboard = () => {
                     <h3 className="font-semibold text-gray-700 mb-3">Quick Actions</h3>
                     <ul className="space-y-2 text-blue-600 font-medium">
                         <li>➕ Add New Student</li>
-                        <li>🧑‍🏫 Add Teacher</li>
+                        {/* <li><Link path="/teacher-management" >🧑‍🏫 Teacher Management</Link></li> */}
+                        <li><Link to="/teacher-management" >🧑‍🏫 Teacher Management</Link></li>
+                        
                         <li>📅 Mark Attendance</li>
                         <li>💰 Generate Fee Invoice</li>
+                        <li> <Link to="/fee-management" >💰 Manage Fee</Link></li>
                     </ul>
                 </div>
 

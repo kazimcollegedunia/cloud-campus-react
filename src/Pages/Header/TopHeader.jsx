@@ -9,6 +9,8 @@ const SideBar = () => {
         "/student": "Students 🧑‍🎓",
         "/attendance": "Attendance 📅",
         "/fee": "Fee Management 💰",
+        "/teacher-management": "Teacher Management 💰",
+        "/fee-management": "Fee Management 💰",
     };
 
      const title = pageTitleMap[pathname] || "School SaaS"; // fallback

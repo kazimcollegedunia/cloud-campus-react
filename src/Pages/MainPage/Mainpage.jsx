@@ -7,6 +7,8 @@ import Dashboard from "../Dashboard/Dashboard";
 import Student from "../Student/StudentMain";
 import Attendance from "../Attendance/AttendancePage";
 import Fee from "../Fee/Fee";
+import Teacher from "../TeanantAdmin/TeacherManagement/TeacherMain";
+import FeeAdmin from "../TeanantAdmin/FeeManagement/FeeMain";
 
 import Signup from "../../Signup/Signup";
 import Signin from "../../Signup/Signin";
@@ -71,6 +73,23 @@ const App = () => {
         } 
       />
 
+      <Route 
+        path="/teacher-management" 
+        element={
+          <DashboardLayout>
+            <Teacher />
+          </DashboardLayout>
+        } 
+      />
+
+      <Route 
+        path="/fee-management" 
+        element={
+          <DashboardLayout>
+            <FeeAdmin />
+          </DashboardLayout>
+        } 
+      />
     </Routes>
   );
 };

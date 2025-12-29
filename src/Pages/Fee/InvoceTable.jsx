@@ -2,7 +2,7 @@ import {useState,useEffect} from 'react';
 import Api from "../../services/api";
 import { CLASS_LIST, SECTION_LIST,SECTION_YEAR_MONTHS } from "../../constants/SchoolData";
 
-const InvoiceTable = (props) => {
+const InvoiceTable = ({data,feeTypes}) => {
 
   const [showPaidModal, setShowPaidModal] = useState(false);
   const [selectedInvoice, setSelectedInvoice] = useState(null);
@@ -13,8 +13,8 @@ const InvoiceTable = (props) => {
       setShowPaidModal(true);
   };
 
-    const tableData = props.data;
-    const feeTypes = props.feeTypes;
+    const tableData = data;
+    // const feeTypes = feeTypes;
     const getStatusClass = (status) => {
       switch (status) {
         case 'Pending':
@@ -29,6 +29,20 @@ const InvoiceTable = (props) => {
           return 'bg-gray-100 text-gray-700';
       }
     };
+
+    const buttonHundler = (data,list = null) => {
+      console.log(data);
+      if(data == "Mark as paid"){
+        return (
+            <button className="px-3 py-1 text-xs rounded-md bg-emerald-100 text-emerald-700 hover:bg-emerald-200"
+            onClick={() => handleMarkAsPaid(list)}
+            >
+              {data}
+            </button>
+          );
+      }
+      
+    }
     // console.log(tableData);
     return <>
         <div className="bg-white rounded-2xl shadow-md p-5">
@@ -81,15 +95,19 @@ const InvoiceTable = (props) => {
                   <button className="px-3 py-1 text-xs rounded-md bg-gray-100 hover:bg-gray-200" value={list.action[0]}>
                     {list.action[0]}
                   </button>
+                  {buttonHundler(list.action[1],list)}
+                  {/* <button className={buttonHundler(list.action[1],'btn-class')}>
+                    {buttonHundler(list.action[1],'btn-name')}
+                  </button> */}
                   {/* <button
                       onClick={() => handleMarkAsPaid(list)}
                       className="px-3 py-1 text-xs rounded-md bg-emerald-100 text-emerald-700 hover:bg-emerald-200"
                     >
                       Mark as Paids
                     </button> */}
-                  <button className="px-3 py-1 text-xs rounded-md bg-emerald-100 text-emerald-700 hover:bg-emerald-200">
+                  {/* <button className="px-3 py-1 text-xs rounded-md bg-emerald-100 text-emerald-700 hover:bg-emerald-200">
                     {list.action[1]}
-                  </button>
+                  </button> */}
                 </td>
                   </tr>
                 ))
