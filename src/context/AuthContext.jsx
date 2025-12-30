@@ -14,7 +14,7 @@ export const AuthProvider = ({ children }) => {
         const res = await Api.get("/auth/me");
         // console.log("Response:" ,res.data.data);
         if(res.status){
-            setUser(res.data.data);
+            setUser(res.data);
         }
     }
 

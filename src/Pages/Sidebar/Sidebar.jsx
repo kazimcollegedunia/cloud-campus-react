@@ -11,6 +11,7 @@ const SideBar = () => {
   // This is only for testing 
 //   let { user } = useAuth();
 //   user = {roel:"admin"};
+// console.log();
   
 
   const [isAdminOpen, setIsAdminOpen] = useState(false);
@@ -50,10 +51,30 @@ const SideBar = () => {
         lg:translate-x-0`}
       >
         {/* HEADER */}
-        <div className="px-6 py-6 text-center border-b border-white/10">
-          <h1 className="text-2xl font-bold">Cloud Campus</h1>
-          <p className="text-xs text-gray-300 mt-1">{user.name??"Panel"}</p>
-        </div>
+        {/* <div className="px-6 py-6 text-center border-b border-white/10"> */}
+                {/* <h1 className="text-2xl font-bold">
+                    {truncateText(user?.tenantData?.school_name ?? "Cloud Campus", 15)}
+                </h1>
+
+                <p className="text-xs text-gray-300 mt-1">
+                    {truncateText(user?.name ?? "Panel", 15)}
+                    {user?.role && (
+                    <span className="block">
+                        {truncateText(user.role, 15)}
+                    </span>
+                    )}
+                </p>
+                </div> */}
+                <div className="px-6 py-6 text-center border-b border-white/10">
+                    <h1 className="text-2xl font-bold truncate max-w-[180px] mx-auto">
+                        {user?.tenantData?.school_name ?? "Cloud Campus"}
+                    </h1>
+
+                    <p className="text-xs text-gray-300 mt-1 truncate max-w-[180px] mx-auto">
+                        {user?.name ?? "User Panel"} {user?.role && `- ${user.role}`}
+                    </p>
+                </div> 
+
 
         {/* NAV */}
         <nav className="flex-1 px-4 space-y-2 mt-6 text-sm overflow-y-auto">

@@ -12,6 +12,8 @@ import FeeAdmin from "../TeanantAdmin/FeeManagement/FeeMain";
 
 import Signup from "../../Signup/Signup";
 import Signin from "../../Signup/Signin";
+import NotFound from "../Errors/NotFound";
+import WorkOnProgress from "../Errors/WorkInProgress";
 
 const App = () => {
   return (
@@ -90,7 +92,10 @@ const App = () => {
           </DashboardLayout>
         } 
       />
+       <Route path="*" element={<WorkOnProgress />} />
     </Routes>
+
+    
   );
 };
 

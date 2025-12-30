@@ -1,6 +1,6 @@
 import {useState} from 'react';
 import { CLASS_LIST, SECTION_LIST,SECTION_YEAR_MONTHS } from "../../constants/SchoolData";
-const InvoceFilter = ({ onApply, feeTypes, onClassChange }) => {
+const InvoceFilter = ({ onApply, feeTypes, onClassChange,filterError }) => {
 
   const [filters, setFilters] = useState({
     class_id: "",

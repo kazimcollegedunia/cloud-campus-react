@@ -3,29 +3,49 @@ import InvoceFilter from './InvoceFilter';
 import InvoiceSummary from './InvoiceSummary';
 import Api from '../../services/api';
 import { useState, useEffect } from 'react';
+import toast from "react-hot-toast";
 
 const Fee = () => {
 
   const [filters, setFilters] = useState({});
   const [feeTypes, setFeeTypes] = useState([]);
   const [invoiceTableData, setInvoiceTableData] = useState([]);
+  const [filterError, setFilterError] = useState({});
+  
 
   // API CALL WITH FILTERS
-  const fetchInvoices = async (extraFilters = {}) => {
-    try {
-      const finalFilters = { ...filters, ...extraFilters };
-      setFilters(finalFilters);
+ const fetchInvoices = async (extraFilters = {}) => {
+  const finalFilters = { ...filters, ...extraFilters };
+  setFilters(finalFilters);
 
-      const response = await Api.get("fee/invoices-list", {
-        params: finalFilters,
-      });
+  // ✅ VALIDATION FIRST
+  if (!finalFilters.feeType) {
+    setFilterError({ feeType: "Please select Fee Type" });
 
-      setInvoiceTableData(response.data.data);
+    toast.error("Fee Type is required to fetch invoices");
+    return; // 🔥 STOP API CALL
+  }
 
-    } catch (err) {
-      console.log("Invoice List Error: ", err);
-    }
-  };
+  // clear error if valid
+  setFilterError({});
+
+  try {
+    const response = await Api.get("fee/invoices-list", {
+      params: finalFilters,
+    });
+
+    setInvoiceTableData(response.data.data);
+
+    toast.success("Invoices loaded successfully");
+
+  } catch (err) {
+    console.log("Invoice List Error: ", err);
+
+    toast.error(
+      err?.response?.data?.message || "Failed to fetch invoices"
+    );
+  }
+};
 
   // FIRST TIME LOAD
   useEffect(() => {
@@ -76,6 +96,7 @@ const Fee = () => {
         onApply={(f) => fetchInvoices(f)}
         onClassChange={(classId) => fetchFeeType(classId)}
         feeTypes={feeTypes}
+        filterError={filterError}
       />
       <InvoiceTable data={invoiceTableData} feeTypes={feeTypes}/>
 
