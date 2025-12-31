@@ -37,12 +37,12 @@ const Teacher = () => {
     };
 
     useEffect(() => {
-      const timer = setTimeout(() => {
-        callGetApi();
-      }, 400);
+    const timer = setTimeout(() => {
+      callGetApi();
+    }, 400);
 
-      return () => clearTimeout(timer);
-    }, [teacherFilter, reload]);
+    return () => clearTimeout(timer);
+  }, [teacherFilter, reload]);
 
     const teacherDetails = (status, teacherDetailsArr = []) => {
         console.log(teacherDetailsArr)
