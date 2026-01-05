@@ -16,6 +16,7 @@ const Teacher = () => {
   const [reload, setReload] = useState(false);
   const [teacherListArr, setTeacherListArr] = useState({});
   const [teacherFilter, setTeacherFilter] = useState({});
+  const [teacherDetailsObj, setTeacherDetailsObj] = useState({});
 
   const filterFormhandler = (e) => { 
     setTeacherFilter(prev => ({
@@ -44,10 +45,14 @@ const Teacher = () => {
     return () => clearTimeout(timer);
   }, [teacherFilter, reload]);
 
-    const teacherDetails = (status, teacherDetailsArr = []) => {
-        console.log(teacherDetailsArr)
-
-    }
+    // Teacher Details Pop up 
+   const teacherDetails = async (status, teacherDetailsArr = null) => {
+      setOpenAssigne(status);
+      if(status){
+        const res = await  Api.get("teacher-management/teacher-details",{params:teacherDetailsArr})
+        setTeacherDetailsObj(res.data.data);
+      }
+    };
 
 
   return (
@@ -100,13 +105,14 @@ const Teacher = () => {
       <TeacherTable 
             reload={reload}
             teacherListArr={teacherListArr}
-            teacherDetails={() => setOpenAssigne(true)} 
-            teacherTimetable={() => setStatusUpdate(true)} 
-            // teacherTimetable={() => setTeacherTimetable(true)} 
+            teacherDetails={teacherDetails}
+            teacherStatusUpdate={() => setStatusUpdate(true)} 
+            teacherTimetable={() => setTeacherTimetable(true)} 
             onClose={() => setOpenForm(true)}
             statusUpdate={() => setStatusUpdate({status:null})}
         />
-      {openAssigne && <TeacherViewDrawer teacherDetails={() => setOpenAssigne(false)}/>}
+      {openAssigne && <TeacherViewDrawer teacher={teacherDetailsObj} teacherDetails={() => teacherDetails(false)} />}
+      {/* {openAssigne && <TeacherViewDrawer teacherDetails={() => setOpenAssigne(false)}/>} */}
       {/* <TeacherLeaveModal /> */}
       {teacherTimetable && <TeacherTimetableDrawer teacherTimetable={() => setTeacherTimetable(false)}/> }
 

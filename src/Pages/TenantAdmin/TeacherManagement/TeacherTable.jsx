@@ -1,7 +1,18 @@
-const TeacherTable = ({ teacherListArr = [],teacherDetails,teacherTimetable,onClose,statusUpdate }) => {
+const TeacherTable = ({ 
+    teacherListArr = [],
+    teacherDetails,
+    teacherTimetable,
+    onClose,
+    statusUpdate
+  }) => {
   const teachers = Array.isArray(teacherListArr)
     ? teacherListArr
     : teacherListArr?.data || [];
+
+    const statusCss = (status) => {
+      return <></>
+
+    }
 
   return (
     <div className="bg-white rounded-2xl shadow-md p-5">
@@ -64,14 +75,14 @@ const TeacherTable = ({ teacherListArr = [],teacherDetails,teacherTimetable,onCl
                   </td>
 
                   <td className="border-b py-2.5 px-3">
-                    <span className="px-2 py-1 text-xs rounded-full bg-green-100 text-green-700">
-                      Active
+                    <span className={teacher?.status == "Active" ?"px-3 py-1 text-xs rounded-md bg-green-100 text-green-700" :"px-3 py-1 text-xs rounded-md bg-red-100 text-red-700"}>
+                      {teacher?.status == "Active" ? "Active": 'Inactive' }
                     </span>
                   </td>
 
                   <td className="border-b py-2.5 px-3 text-right space-x-2">
                     <button className="px-3 py-1 text-xs rounded-md bg-indigo-100 text-indigo-700"
-                    onClick={teacherDetails}
+                    onClick={() => {teacherDetails(true,{teacher_id:teacher.teacher_id })}}
                     >
                       Assign
                     </button>
@@ -85,11 +96,12 @@ const TeacherTable = ({ teacherListArr = [],teacherDetails,teacherTimetable,onCl
                     >
                       Edit
                     </button>
-                    <button className="px-3 py-1 text-xs rounded-md bg-red-100 text-red-700"
+
+                    {/* <button className={teacher?.status == "Active" ? "px-3 py-1 text-xs rounded-md bg-red-100 text-red-700" : "px-3 py-1 text-xs rounded-md bg-green-100 text-green-700"}
                         onClick={(e) => {statusUpdate('inactive')}}
                     >
-                      Inactive
-                    </button>
+                      {teacher?.status == "Active" ? "Inactive": 'Active' }
+                    </button> */}
                   </td>
                 </tr>
               ))

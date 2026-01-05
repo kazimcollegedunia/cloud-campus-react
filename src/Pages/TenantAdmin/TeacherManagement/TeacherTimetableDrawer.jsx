@@ -1,5 +1,5 @@
-const days = ["Mon", "Tue", "Wed", "Thu", "Fri"];
-const periods = ["1", "2", "3", "4", "5", "6"];
+const days = ["Mon", "Tue", "Wed", "Thu", "Fri",'Sat'];
+const periods = ["1", "2", "3", "4", "5", "6",'7'];
 
 const TeacherTimetableDrawer = ({ teacher, teacherTimetable }) => {
   return (

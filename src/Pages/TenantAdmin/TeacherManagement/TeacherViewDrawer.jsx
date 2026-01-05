@@ -1,4 +1,6 @@
 const TeacherViewDrawer = ({ teacher, teacherDetails }) => {
+  // console.log("teacher teacher: :",teacher);
+  let stausClass = teacher?.status == "Active"? "bg-green-100 text-green-700" :"bg-rose-100 text-rose-700";
   return (
     <>
       {/* Overlay */}
@@ -59,24 +61,45 @@ const TeacherViewDrawer = ({ teacher, teacherDetails }) => {
 
             <div>
               <div className="text-gray-500">Status</div>
-              <span className="inline-block mt-1 px-2 py-1 text-xs rounded-full bg-green-100 text-green-700">
-                Active
+              <span className={ `inline-block mt-1 px-2 py-1 text-xs rounded-full ${stausClass}`}>
+                {teacher?.status}
               </span>
             </div>
 
             <div>
               <div className="text-gray-500">Joined On</div>
               <div className="font-medium">
-                12 Apr 2024
+                {teacher?.joining_date}
               </div>
             </div>
 
             <div>
               <div className="text-gray-500">Role</div>
               <div className="font-medium">
-                Teacher
+                {teacher?.designation}
               </div>
             </div>
+
+            <div>
+              <div className="text-gray-500">Qualification</div>
+              <div className="font-medium">
+                {teacher?.qualification}
+              </div>
+            </div>
+
+            <div>
+              <div className="text-gray-500">Experience</div>
+              <div className="font-medium">
+                {teacher?.experience_years}
+              </div>
+            </div>
+            <div>
+              <div className="text-gray-500">Gender</div>
+              <div className="font-medium">
+                {teacher?.gender}
+              </div>
+            </div>
+
           </div>
 
           {/* Assigned Classes */}
@@ -86,14 +109,17 @@ const TeacherViewDrawer = ({ teacher, teacherDetails }) => {
             </h4>
 
             <div className="flex flex-wrap gap-2">
-              <span className="px-2 py-1 text-xs rounded bg-blue-100 text-blue-700">
-                Class 10 - A
-              </span>
-              <span className="px-2 py-1 text-xs rounded bg-blue-100 text-blue-700">
-                Class 9 - B
-              </span>
+              {teacher?.assigned_classes?.map((classes,key) => {
+                
+                {return <span className="px-2 py-1 text-xs rounded bg-blue-100 text-blue-700" key={key}>
+                  {classes}
+                </span>}
+              })}
             </div>
           </div>
+          <button className="flex-1 px-4 py-2 text-sm border bg-green-600 text-white rounded-lg">
+            Assign & update  Class
+          </button>
 
           {/* Activity / History */}
           <div>
