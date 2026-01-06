@@ -34,10 +34,10 @@ const InvoceFilter = ({ onApply, feeTypes, onClassChange,filterError }) => {
     return  <div className="bg-white rounded-2xl shadow-md p-5">
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-4">
             <h3 className="text-lg font-semibold">Filter Invoices</h3>
-            <button
+            {/* <button
                 className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm rounded-lg font-semibold">
                 + Create New Invoice
-            </button>
+            </button> */}
             </div>
 
             <form
@@ -57,7 +57,7 @@ const InvoceFilter = ({ onApply, feeTypes, onClassChange,filterError }) => {
                         >
                         <option value=" ">All Classes</option>
                         {CLASS_LIST.map((cls,key) => (
-                            <option value={cls}>
+                            <option key={key} value={cls}>
                             Class {cls}
                             </option>
                         ))}
@@ -74,24 +74,31 @@ const InvoceFilter = ({ onApply, feeTypes, onClassChange,filterError }) => {
                         >
                         <option value=" ">All Section</option>
                         {SECTION_LIST.map((sec,key) => (
-                            <option  value={sec}>
+                            <option key={key}  value={sec}>
                             Section {sec}
                             </option>
                         ))}
                         </select>
                     </div>
 
-                    <div>
-                        <label className="block font-medium mb-1">Status</label>
+                     <div>
+                        <label className="block font-medium mb-1">Fee Type</label>
                         <select
-                        name="status"
-                        onChange={changeHandler}
-                        className="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                            name="feeType"
+                            disabled={!filters.class_id}   // 🔥 key line
+                            onChange={changeHandler}
+                            className="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-1 focus:ring-blue-500 disabled:bg-gray-100"
                         >
-                        <option value="">All</option>
-                        <option value="paid">Paid</option>
-                        <option value="pending">Pending</option>
-                        <option value="overdue">Overdue</option>
+                            <option value="">
+                            {filters.class_id ? "Select Fee Type" : "Select Class First"}
+                            </option>
+
+                            {feeTypes.length > 0 &&
+                            feeTypes.map((list) => (
+                                <option key={list.id} value={list.id}>
+                                {list.name}
+                                </option>
+                            ))}
                         </select>
                     </div>
 
@@ -114,23 +121,16 @@ const InvoceFilter = ({ onApply, feeTypes, onClassChange,filterError }) => {
                     </div>
 
                     <div>
-                        <label className="block font-medium mb-1">Fee Type</label>
+                        <label className="block font-medium mb-1">Status</label>
                         <select
-                            name="feeType"
-                            disabled={!filters.class_id}   // 🔥 key line
-                            onChange={changeHandler}
-                            className="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-1 focus:ring-blue-500 disabled:bg-gray-100"
+                        name="status"
+                        onChange={changeHandler}
+                        className="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-1 focus:ring-blue-500"
                         >
-                            <option value="">
-                            {filters.class_id ? "Select Fee Type" : "Select Class First"}
-                            </option>
-
-                            {feeTypes.length > 0 &&
-                            feeTypes.map((list) => (
-                                <option key={list.id} value={list.id}>
-                                {list.name}
-                                </option>
-                            ))}
+                        <option value="">All</option>
+                        <option value="paid">Paid</option>
+                        {/* <option value="pending">Pending</option>
+                        <option value="overdue">Overdue</option> */}
                         </select>
                     </div>
 

@@ -14,38 +14,38 @@ const Fee = () => {
   
 
   // API CALL WITH FILTERS
- const fetchInvoices = async (extraFilters = {}) => {
-  const finalFilters = { ...filters, ...extraFilters };
-  setFilters(finalFilters);
+  const fetchInvoices = async (extraFilters = {}) => {
+    const finalFilters = { ...filters, ...extraFilters };
+    setFilters(finalFilters);
 
-  // ✅ VALIDATION FIRST
-  if (!finalFilters.feeType) {
-    setFilterError({ feeType: "Please select Fee Type" });
+    // ✅ VALIDATION FIRST
+    if (!finalFilters.feeType) {
+      setFilterError({ feeType: "Please select Fee Type" });
 
-    toast.error("Fee Type is required to fetch invoices");
-    return; // 🔥 STOP API CALL
+      toast.error("Fee Type is required to fetch invoices");
+      return; // 🔥 STOP API CALL
+    }
+
+    // clear error if valid
+    setFilterError({});
+
+    try {
+      const response = await Api.get("fee/invoices-list", {
+        params: finalFilters,
+      });
+
+      setInvoiceTableData(response.data.data);
+
+      // toast.success("Invoices loaded successfully");
+
+    } catch (err) {
+      console.log("Invoice List Error: ", err);
+
+      toast.error(
+        err?.response?.data?.message || "Failed to fetch invoices"
+      );
+    }
   }
-
-  // clear error if valid
-  setFilterError({});
-
-  try {
-    const response = await Api.get("fee/invoices-list", {
-      params: finalFilters,
-    });
-
-    setInvoiceTableData(response.data.data);
-
-    toast.success("Invoices loaded successfully");
-
-  } catch (err) {
-    console.log("Invoice List Error: ", err);
-
-    toast.error(
-      err?.response?.data?.message || "Failed to fetch invoices"
-    );
-  }
-};
 
   // FIRST TIME LOAD
   useEffect(() => {
@@ -53,23 +53,6 @@ const Fee = () => {
     fetchFeeType()
   }, []);
 
-  // fee/types apis
-
-  // const fetchFeeType = async (extraFilters = {}) => {
-  //   try {
-  //     const finalFilters = { ...filters, ...extraFilters };
-  //     setFilters(finalFilters);
-
-  //     const response = await Api.get("fee/types", {
-  //       params: finalFilters,
-  //     });
-
-  //     setFeeTypes(response.data.data);
-
-  //   } catch (err) {
-  //     console.log("Invoice List Error: ", err);
-  //   }
-  // };
 
   const fetchFeeType = async (classId) => {
     try {
@@ -98,7 +81,7 @@ const Fee = () => {
         feeTypes={feeTypes}
         filterError={filterError}
       />
-      <InvoiceTable data={invoiceTableData} feeTypes={feeTypes}/>
+      <InvoiceTable data={invoiceTableData} feeTypes={feeTypes} refreshTable={() =>fetchInvoices()}/>
 
     </section>
   );
